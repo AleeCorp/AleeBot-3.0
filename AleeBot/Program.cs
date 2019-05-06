@@ -22,7 +22,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
-using Discord.API;
 using Discord.WebSocket;
 
 namespace AleeBot
@@ -43,17 +42,16 @@ namespace AleeBot
 
         public async Task MainAsync()
         {
-            string token = "token";
 
             _client = new DiscordSocketClient();
 
             _client.Log += Log;
 
-            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("config.json"));
             await _client.StartAsync();
 
             _client.MessageReceived += Message;
-
+            
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
