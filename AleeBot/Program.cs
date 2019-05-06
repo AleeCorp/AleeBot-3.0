@@ -59,14 +59,14 @@ namespace AleeBot
 
             await _client.LoginAsync(TokenType.Bot, File.ReadAllText("token.txt"));
             await _client.StartAsync();
-
+            await _client.SetGameAsync(name:"AleeBot " + Data.Version + " | " + Data.prefix + "help");
+            
             _client.MessageReceived += Message;
-
-            //await _client.SetGameAsync();
 
             _client.Ready += () =>
             {
                 Console.WriteLine("[SUCCESS] AleeBot "+ Data.Version + " is now ready!");
+
                 return Task.CompletedTask;
             };
 
@@ -95,6 +95,7 @@ namespace AleeBot
                 if (message.Author.Id == 242775871059001344)
                 {
                     await message.Channel.SendMessageAsync("⚠ AleeBot will now exit!");
+                    await _client.SetStatusAsync(UserStatus.Offline);
                     Environment.Exit(0);
                 } else
                 {
@@ -114,7 +115,7 @@ namespace AleeBot
                 await message.Channel.SendMessageAsync(embed: embed.Build());
             } else if (message.Content == Data.prefix + "uptime")
             {
-                //TODO
+                //TODO Possibly in AleeBot 3.1
             }
         }
 
