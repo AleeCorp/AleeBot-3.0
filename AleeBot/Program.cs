@@ -19,14 +19,71 @@
  **********************************************/
 
 using System;
+using System.IO;
+using System.Threading.Tasks;
+using Discord;
+using Discord.API;
+using Discord.WebSocket;
 
 namespace AleeBot
 {
-    internal class Program
+     public class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to AleeBot!");
+            Console.WriteLine("Starting AleeBot.NET");
+            Console.WriteLine("Version: 3.0 Beta 1\n");
+            Console.WriteLine("Machine Name: " + Environment.MachineName);
+            Console.WriteLine("OS Version: " + Environment.OSVersion);
+            Console.WriteLine("\n");
+            new Program().MainAsync().GetAwaiter().GetResult();
+        }
+
+        private DiscordSocketClient _client;
+
+        public async Task MainAsync()
+        {
+            string token = "token";
+
+            _client = new DiscordSocketClient();
+
+            _client.Log += Log;
+
+            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.StartAsync();
+
+            _client.MessageReceived += Message;
+
+            // Block this task until the program is closed.
+            await Task.Delay(-1);
+        }
+        private async Task Message(SocketMessage message)
+        {
+            if (message.Content == "ab:ping")
+            {
+                await message.Channel.SendMessageAsync("Pong! Running on .NET Core!");
+            }
+            else if (message.Content == "ab:version")
+            {
+                await message.Channel.SendMessageAsync("AleeBot 3.0 Beta 1");
+            }
+            else if (message.Content == "ab:embed")
+            {
+                Color darkGrey = new Color(96, 125, 139);
+                var embed = new EmbedBuilder
+                {
+                    Title = "Hello World",
+                    Color = darkGrey,
+                    Description = "This is a embed!",
+                };
+                await message.Channel.SendMessageAsync(embed: embed.Build());
+            }
+        }
+
+        private Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
         }
     }
 }
