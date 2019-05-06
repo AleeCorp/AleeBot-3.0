@@ -80,14 +80,15 @@ namespace AleeBot
             {
                 var embed = new EmbedBuilder();
                 embed.WithTitle("AleeBot.NET "+ Data.Version +" Help.");
-                embed.WithDescription("Every command you input into AleeBot is `ab:`");
+                embed.WithDescription("Every command you input into AleeBot is `"+ Data.prefix +"`");
                 embed.WithColor(Color.Green);
-                embed.AddField("Commands:", "ab:help\nab:ping\nab:git\nab:poweroff");
+                embed.AddField("Commands:", "ab:help\nab:ping\nab:git\nab:about\nab:poweroff");
+                embed.WithFooter("AleeCorp Copyright 2012-2019, Licensed with GPL-3.0");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
             }
             else if (message.Content == Data.prefix + "ping")
             {
-                await message.Channel.SendMessageAsync("🏓 Pong! Running on .NET Core!");
+                await message.Channel.SendMessageAsync("🏓 Pong!");
             }
             else if (message.Content == Data.prefix + "poweroff")
             {
@@ -102,6 +103,18 @@ namespace AleeBot
             } else if (message.Content == Data.prefix + "git")
             {
                 await message.Channel.SendMessageAsync("Feel free to contribute in the AleeBot repo by following this link!\nhttps://github.com/AleeCorp/AleeBot.NET");
+            } else if (message.Content == Data.prefix + "about")
+            {
+                var embed = new EmbedBuilder();
+                embed.WithTitle("About AleeBot " + Data.Version);
+                embed.WithColor(Color.Green);
+                embed.AddField("Server Information", "Machine Name:" + Environment.MachineName + "\n" + "OS Version:" + Environment.OSVersion + "\n");
+                embed.AddField("Contributors", "Andrew (Alee14) - Original creator of AleeBot 1.0 and 2.0");
+                embed.AddField("Built on", ".NET Core 3 Preview");
+                await message.Channel.SendMessageAsync(embed: embed.Build());
+            } else if (message.Content == Data.prefix + "uptime")
+            {
+                //TODO
             }
         }
 
