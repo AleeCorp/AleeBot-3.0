@@ -23,7 +23,7 @@ namespace AleeBot
     {
         //This will be storing public variables such as versions and stuff.
 
-        public static string Version = "3.0 Beta 1";
+        public static string Version = "3.0 Beta";
         public static string prefix = "ab:";
     }
 }

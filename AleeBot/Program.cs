@@ -62,6 +62,8 @@ namespace AleeBot
 
             _client.MessageReceived += Message;
 
+            //await _client.SetGameAsync();
+
             _client.Ready += () =>
             {
                 Console.WriteLine("[SUCCESS] AleeBot "+ Data.Version + " is now ready!");
@@ -70,16 +72,17 @@ namespace AleeBot
 
             await Task.Delay(-1);
         }
+
         private async Task Message(SocketMessage message)
         {
 
             if (message.Content == Data.prefix + "help")
             {
                 var embed = new EmbedBuilder();
-                embed.WithTitle("AleeBot.NET "+ Data.Version +" Help");
+                embed.WithTitle("AleeBot.NET "+ Data.Version +" Help.");
                 embed.WithDescription("Every command you input into AleeBot is `ab:`");
                 embed.WithColor(Color.Green);
-                embed.AddField("Commands:", "ab:help\nab:ping");
+                embed.AddField("Commands:", "ab:help\nab:ping\nab:git\nab:poweroff");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
             }
             else if (message.Content == Data.prefix + "ping")
@@ -88,9 +91,17 @@ namespace AleeBot
             }
             else if (message.Content == Data.prefix + "poweroff")
             {
-                //if (message.Author = 242775871059001344)
-                await message.Channel.SendMessageAsync("⚠ AleeBot will now exit!");
-                Environment.Exit(0);
+                if (message.Author.Id == 242775871059001344)
+                {
+                    await message.Channel.SendMessageAsync("⚠ AleeBot will now exit!");
+                    Environment.Exit(0);
+                } else
+                {
+                    await message.Channel.SendMessageAsync("You don't have permissions to power me off...");
+                }
+            } else if (message.Content == Data.prefix + "git")
+            {
+                await message.Channel.SendMessageAsync("Feel free to contribute in the AleeBot repo by following this link!\nhttps://github.com/AleeCorp/AleeBot.NET");
             }
         }
 

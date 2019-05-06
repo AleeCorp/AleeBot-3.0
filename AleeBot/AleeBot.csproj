@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,7 +9,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Company>AleeCorp</Company>
     <ApplicationIcon>AleeBot.ico</ApplicationIcon>
-    <AssemblyName>AleeBot.NET</AssemblyName>
+    <AssemblyName>AleeBot</AssemblyName>
     <RootNamespace>AleeBot</RootNamespace>
     <RepositoryUrl>https://github.com/AleeCorp/AleeBot.NET</RepositoryUrl>
   </PropertyGroup>
@@ -19,9 +19,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="" />
-  </Target>
-
 </Project>
