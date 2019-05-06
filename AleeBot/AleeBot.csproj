@@ -8,6 +8,10 @@
     <Copyright>(C) Copyright 2019</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <Company>AleeCorp</Company>
+    <ApplicationIcon>AleeBot.ico</ApplicationIcon>
+    <AssemblyName>AleeBot.NET</AssemblyName>
+    <RootNamespace>AleeBot</RootNamespace>
+    <RepositoryUrl>https://github.com/AleeCorp/AleeBot.NET</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +19,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="" />
+  </Target>
 
 </Project>

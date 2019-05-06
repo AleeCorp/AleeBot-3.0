@@ -30,12 +30,20 @@ namespace AleeBot
     {
         public static void Main(string[] args)
         {
+            Console.Title = "AleeBot " + Data.Version + " Console";
             Console.WriteLine("Starting AleeBot.NET");
-            Console.WriteLine("Version: 3.0 Beta 1\n");
+            Console.WriteLine("Version: "+ Data.Version +"\n");
             Console.WriteLine("Machine Name: " + Environment.MachineName);
             Console.WriteLine("OS Version: " + Environment.OSVersion);
             Console.WriteLine("\n");
-            new Program().MainAsync().GetAwaiter().GetResult();
+            if (File.Exists("token.txt"))
+            {
+                new Program().MainAsync().GetAwaiter().GetResult();
+            } else
+            {
+                Console.WriteLine("[ERROR] token.txt isn't found.");
+                Environment.Exit(0);
+            }
         }
 
         private DiscordSocketClient _client;
@@ -45,36 +53,44 @@ namespace AleeBot
 
             _client = new DiscordSocketClient();
 
+            #if DEBUG
             _client.Log += Log;
+            #endif
 
-            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("config.json"));
+            await _client.LoginAsync(TokenType.Bot, File.ReadAllText("token.txt"));
             await _client.StartAsync();
 
             _client.MessageReceived += Message;
-            
-            // Block this task until the program is closed.
+
+            _client.Ready += () =>
+            {
+                Console.WriteLine("[SUCCESS] AleeBot "+ Data.Version + " is now ready!");
+                return Task.CompletedTask;
+            };
+
             await Task.Delay(-1);
         }
         private async Task Message(SocketMessage message)
         {
-            if (message.Content == "ab:ping")
+
+            if (message.Content == Data.prefix + "help")
             {
-                await message.Channel.SendMessageAsync("Pong! Running on .NET Core!");
-            }
-            else if (message.Content == "ab:version")
-            {
-                await message.Channel.SendMessageAsync("AleeBot 3.0 Beta 1");
-            }
-            else if (message.Content == "ab:embed")
-            {
-                Color darkGrey = new Color(96, 125, 139);
-                var embed = new EmbedBuilder
-                {
-                    Title = "Hello World",
-                    Color = darkGrey,
-                    Description = "This is a embed!",
-                };
+                var embed = new EmbedBuilder();
+                embed.WithTitle("AleeBot.NET "+ Data.Version +" Help");
+                embed.WithDescription("Every command you input into AleeBot is `ab:`");
+                embed.WithColor(Color.Green);
+                embed.AddField("Commands:", "ab:help\nab:ping");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
+            }
+            else if (message.Content == Data.prefix + "ping")
+            {
+                await message.Channel.SendMessageAsync("🏓 Pong! Running on .NET Core!");
+            }
+            else if (message.Content == Data.prefix + "poweroff")
+            {
+                //if (message.Author = 242775871059001344)
+                await message.Channel.SendMessageAsync("⚠ AleeBot will now exit!");
+                Environment.Exit(0);
             }
         }
 
