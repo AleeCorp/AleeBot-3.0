@@ -99,7 +99,7 @@ namespace AleeBot
                     Environment.Exit(0);
                 } else
                 {
-                    await message.Channel.SendMessageAsync("You don't have permissions to power me off...");
+                    await message.Channel.SendMessageAsync("@<"+ message.Author.Id +">, You don't have permissions to power me off...");
                 }
             } else if (message.Content == Data.prefix + "git")
             {
