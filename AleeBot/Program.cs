@@ -109,7 +109,7 @@ namespace AleeBot
                 var embed = new EmbedBuilder();
                 embed.WithTitle("About AleeBot " + Data.Version);
                 embed.WithColor(Color.Green);
-                embed.AddField("Server Information", "Machine Name:" + Environment.MachineName + "\n" + "OS Version:" + Environment.OSVersion + "\n");
+                embed.AddField("Server Information", "Machine Name: " + Environment.MachineName + "\n" + "OS Version: " + Environment.OSVersion + "\n");
                 embed.AddField("Contributors", "Andrew (Alee14) - Original creator of AleeBot 1.0 and 2.0");
                 embed.AddField("Built on", ".NET Core 3 Preview");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
