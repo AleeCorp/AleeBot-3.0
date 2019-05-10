@@ -31,11 +31,11 @@ namespace AleeBot
     {
         public static void Main(string[] args)
         {
-            Console.Title = "AleeBot " + Data.Version + " Console";
+            Console.Title = $"AleeBot {Data.Version} Console";
             Console.WriteLine("Starting AleeBot.NET");
-            Console.WriteLine("Version: "+ Data.Version +"\n");
-            Console.WriteLine("Machine Name: " + Environment.MachineName);
-            Console.WriteLine("OS Version: " + Environment.OSVersion);
+            Console.WriteLine($"Version: {Data.Version}\n");
+            Console.WriteLine("Machine Name: ", Environment.MachineName);
+            Console.WriteLine("OS Version: ", Environment.OSVersion);
             Console.WriteLine("\n");
             if (File.Exists("token.txt"))
             {
@@ -48,11 +48,14 @@ namespace AleeBot
         }
 
         private DiscordSocketClient _client;
+        private CommandService _commands;
+        private IServiceProvider _services;
 
         public async Task MainAsync()
         {
 
             _client = new DiscordSocketClient();
+            _commands = new CommandService();
 
             #if DEBUG
             _client.Log += Log;
@@ -60,13 +63,13 @@ namespace AleeBot
 
             await _client.LoginAsync(TokenType.Bot, File.ReadAllText("token.txt"));
             await _client.StartAsync();
-            await _client.SetGameAsync(name:"AleeBot " + Data.Version + " | " + Data.prefix + "help");
+            await _client.SetGameAsync(name:$"AleeBot {Data.Version} | {Data.prefix}help");
             
             _client.MessageReceived += Message;
 
             _client.Ready += () =>
             {
-                Console.WriteLine("[SUCCESS] AleeBot "+ Data.Version + " is now ready!");
+                Console.WriteLine($"[SUCCESS] AleeBot {Data.Version} is now ready!");
 
                 return Task.CompletedTask;
             };
@@ -90,8 +93,8 @@ namespace AleeBot
                 embed.WithDescription($"Every command you input into AleeBot is `{Data.prefix}`");
                 embed.WithColor(Color.Green);
                 embed.AddField("Information:", "help\nping\ngit\nabout\nuptime\nchangelog");
-                embed.AddField("Bot Owner Only:", "poweroff");
-                embed.WithFooter("AleeCorp Copyright 2012-2019, Licensed with GPL-3.0");
+                embed.AddField("Bot Owner Only:", "poweroff\nreboot");
+                embed.WithFooter("AleeCorp Copyright 2012-2019");
                 embed.WithCurrentTimestamp();
                 await message.Channel.SendMessageAsync(embed: embed.Build());
             }
@@ -104,16 +107,37 @@ namespace AleeBot
                 if (message.Author.Id == 242775871059001344)
                 {
                     await message.Channel.SendMessageAsync("⚠ AleeBot will now exit!");
-                    await _client.SetStatusAsync(UserStatus.Offline);
+                    Console.WriteLine("[INFO] AleeBot is powering off...");
+                    await _client.StopAsync();
+                    Console.WriteLine("[SUCCESS] Press any key to exit...");
+                    Console.ReadKey();
                     Environment.Exit(0);
-                } else
+                }
+                else
                 {
                     await message.Channel.SendMessageAsync($"<@{message.Author.Id}>, You don't have permissions to power me off...");
                 }
-            } else if (message.Content == Data.prefix + "git")
+            }
+            else if (message.Content == Data.prefix + "reboot")
+            {
+                if (message.Author.Id == 242775871059001344)
+                {
+                    await message.Channel.SendMessageAsync("⚠ AleeBot will now reboot!");
+                    await _client.StopAsync();
+                    Console.WriteLine("[INFO] AleeBot is restarting...");
+                    await MainAsync();
+                }
+                else
+                {
+                    await message.Channel.SendMessageAsync($"<@{message.Author.Id}>, You don't have permissions to reboot me...");
+                }
+
+            }
+            else if (message.Content == Data.prefix + "git")
             {
                 await message.Channel.SendMessageAsync("Feel free to contribute in the AleeBot repo by following this link!\nhttps://github.com/AleeCorp/AleeBot.NET");
-            } else if (message.Content == Data.prefix + "about")
+            }
+            else if (message.Content == Data.prefix + "about")
             {
                 var embed = new EmbedBuilder();
                 embed.WithTitle($"About AleeBot {Data.Version}");
@@ -121,8 +145,10 @@ namespace AleeBot
                 embed.AddField("Server Information", $"Machine Name: {Environment.MachineName}\nOS Version: {Environment.OSVersion}\n");
                 embed.AddField("Contributors", "Andrew (Alee14) - Original creator of AleeBot 1.0 and 2.0");
                 embed.AddField("Built on", ".NET Core 3 Preview");
+                embed.WithFooter("AleeCorp Copyright 2012-2019, Licensed with GPL-3.0");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
-            } else if (message.Content == Data.prefix + "uptime")
+            }
+            else if (message.Content == Data.prefix + "uptime")
             {
                 var embed = new EmbedBuilder();
                 embed.WithTitle("AleeBot Uptime");
@@ -130,7 +156,8 @@ namespace AleeBot
                 embed.AddField("System Uptime", "Coming Soon!");
                 embed.AddField("Bot Uptime", "Coming Soon!");
                 await message.Channel.SendMessageAsync(embed: embed.Build());
-            } else if (message.Content == Data.prefix + "changelog")
+            }
+            else if (message.Content == Data.prefix + "changelog")
             {
                 var embed = new EmbedBuilder();
                 embed.WithTitle("AleeBot Changelog");
@@ -138,6 +165,7 @@ namespace AleeBot
                 embed.WithDescription($"Changelog for AleeBot {Data.Version}");
                 embed.AddField("What's new?", "- Added Uptime\n- Changed the help command\n- Added a changelog command");
                 embed.WithFooter("Thanks for using AleeBot!");
+                await message.Channel.SendMessageAsync(embed: embed.Build());
             }
         }
     }
