@@ -17,24 +17,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  **********************************************/
-using Discord;
-using Discord.Commands;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace AleeBot.Modules
 {
-    public class Changelog : ModuleBase<SocketCommandContext>
+    public class Avatar : ModuleBase<SocketCommandContext>
     {
-        [Command("changelog")]
-        public async Task ChangelogAsync()
+        [Command("avatar")]
+        public async Task AvatarAsync()
         {
-            var embed = new EmbedBuilder();
-            embed.WithTitle("AleeBot Changelog");
-            embed.WithColor(Color.Green);
-            embed.WithDescription($"Changelog for AleeBot {Data.Version}");
-            embed.AddField("What's new?", "- Command handler!\n- Added a uptime command\n- Revamped the help command\n- Added a changelog command\n- Added the say command (Bot owner only)\n- Added back the avatar command");
-            embed.WithFooter("Thanks for using AleeBot!");
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            await ReplyAsync(Context.User.GetAvatarUrl());
         }
     }
 }

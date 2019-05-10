@@ -32,8 +32,9 @@ namespace AleeBot.Modules
             embed.WithTitle($"AleeBot.NET {Data.Version} Help.");
             embed.WithDescription($"Every command you input into AleeBot is `{Data.prefix}`");
             embed.WithColor(Color.Green);
-            embed.AddField("Information:", "help\nping\ngit\nabout\nuptime\nchangelog");
-            embed.AddField("Bot Owner Only:", "poweroff");
+            embed.AddField("Information:", "help\nping\ngit\nabout\nuptime\nchangelog", true);
+            embed.AddField("User Information:", "avatar", true);
+            embed.AddField("Bot Owner Only:", "say\npoweroff", true);
             embed.WithFooter("AleeCorp Copyright 2012-2019");
             embed.WithCurrentTimestamp();
             await Context.Channel.SendMessageAsync(embed: embed.Build());

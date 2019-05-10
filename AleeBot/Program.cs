@@ -104,8 +104,6 @@ namespace AleeBot
                 services: null);
         }
 
-
-
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());

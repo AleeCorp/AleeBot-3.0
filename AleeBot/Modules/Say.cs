@@ -17,24 +17,33 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  **********************************************/
-using Discord;
 using Discord.Commands;
+using Discord;
 using System.Threading.Tasks;
 
 namespace AleeBot.Modules
 {
-    public class Changelog : ModuleBase<SocketCommandContext>
+    public class Say : ModuleBase<SocketCommandContext>
     {
-        [Command("changelog")]
-        public async Task ChangelogAsync()
+        [Command("say")]
+        public async Task SayAsync(string echo)
         {
-            var embed = new EmbedBuilder();
-            embed.WithTitle("AleeBot Changelog");
-            embed.WithColor(Color.Green);
-            embed.WithDescription($"Changelog for AleeBot {Data.Version}");
-            embed.AddField("What's new?", "- Command handler!\n- Added a uptime command\n- Revamped the help command\n- Added a changelog command\n- Added the say command (Bot owner only)\n- Added back the avatar command");
-            embed.WithFooter("Thanks for using AleeBot!");
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            if (Context.User.Id == 242775871059001344)
+            {
+                if (ChannelPermissions.Text.ManageMessages == false)
+                {
+                    await Context.Message.DeleteAsync();
+                    await ReplyAsync(echo);
+                }
+                else
+                {
+                    await ReplyAsync(echo);
+                }
+            }
+            else
+            {
+                await ReplyAsync($"{Context.User.Mention}, You don't have permissions to use this command.");
+            }
         }
     }
 }
