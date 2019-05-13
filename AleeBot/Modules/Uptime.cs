@@ -17,6 +17,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  **********************************************/
+using System;
+using System.Diagnostics;
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
@@ -31,9 +33,19 @@ namespace AleeBot.Modules
             var embed = new EmbedBuilder();
             embed.WithTitle("AleeBot Uptime");
             embed.WithColor(Color.Green);
-            embed.AddField("System Uptime", "Coming Soon!");
+            embed.AddField("System Uptime", SysUptime());
             embed.AddField("Bot Uptime", "Coming Soon!");
             await Context.Channel.SendMessageAsync(embed: embed.Build());
-    }
+        }
+
+        public TimeSpan SysUptime()
+        {
+                using (var uptime = new PerformanceCounter("System", "System Up Time"))
+                {
+                    uptime.NextValue();
+                    return TimeSpan.FromSeconds(uptime.NextValue());
+                }
+            
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace AleeBot
             else
             {
                 Console.WriteLine("[ERROR] token.txt isn't found.");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
         }
@@ -69,7 +70,6 @@ namespace AleeBot
             _client.Ready += () =>
             {
                 Console.WriteLine($"[SUCCESS] AleeBot {Data.Version} is now ready!");
-
                 return Task.CompletedTask;
             };
 
